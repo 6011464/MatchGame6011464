@@ -5,53 +5,58 @@
 
 
     <ScrollView>
-        <!-- Elemento de desplazamiento -->
-
+        <!-- VerticalStackLayout para organizar los elementos en disposición vertical -->
         <VerticalStackLayout 
-            Spacing="25"
-        
-            Padding="30,0"
-          
-            VerticalOptions="Center">
-            <!-- Opciones de diseño vertical  -->
+     Spacing="25" 
+     Padding="30,0"
+     
+     VerticalOptions="Center">
+
+
+            <!-- Etiqueta para el título del juego -->
             <Label Text="Match Game Indel 6011464" x:Name="lblPrincipal" FontSize="Large" HorizontalOptions="Center" />
-            <!-- Etiqueta de título -->
+
+            <!-- Botón para reiniciar el juego -->
+            <Button Text="Restart" Clicked="RestartButton_Clicked" HorizontalOptions="Center" />
+
+            <!-- Etiqueta para mostrar el temporizador -->
+            <Label x:Name="lblTimer" Text="Time: 00:00" FontSize="Large" HorizontalOptions="Center" />
+
+            <!-- Grid para organizar los botones del juego -->
             <Grid x:Name="Grid1">
-                <!-- Definición de un grid con nombre Grid1 -->
+                <!-- Definición de columnas en el Grid -->
                 <Grid.ColumnDefinitions>
-                    <!-- columnas -->
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+                <!-- Definición de filas en el Grid -->
                 <Grid.RowDefinitions>
-                    <!-- filas -->
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <!-- Botones con texto, tamaño de fuente 36, cada uno con su propio evento Clicked -->
+
+                <!-- Botones para el juego -->
+                <!-- Se especifica posición en el Grid -->
+
                 <Button Text="?" FontSize="36" Clicked="Button_Clicked"/>
                 <Button Text="?" FontSize="36" Grid.Column="1" Clicked="Button_Clicked"/>
                 <Button Text="?" FontSize="36" Grid.Column="2" Clicked="Button_Clicked"/>
                 <Button Text="?" FontSize="36" Grid.Column="3" Clicked="Button_Clicked"/>
+                <Button Text="?" FontSize="36" Grid.Column="4" Clicked="Button_Clicked"/>
+                <Button Text="?" FontSize="36" Grid.Column="5" Clicked="Button_Clicked"/>
                 <Button Text="?" FontSize="36" Grid.Row="1" Clicked="Button_Clicked"/>
                 <Button Text="?" FontSize="36" Grid.Row="1" Grid.Column="1" Clicked="Button_Clicked"/>
                 <Button Text="?" FontSize="36" Grid.Row="1" Grid.Column="2" Clicked="Button_Clicked"/>
                 <Button Text="?" FontSize="36" Grid.Row="1" Grid.Column="3" Clicked="Button_Clicked"/>
-                <Button Text="?" FontSize="36" Grid.Row="2" Clicked="Button_Clicked"/>
-                <Button Text="?" FontSize="36" Grid.Row="2" Grid.Column="1" Clicked="Button_Clicked"/>
-                <Button Text="?" FontSize="36" Grid.Row="2" Grid.Column="2" Clicked="Button_Clicked"/>
-                <Button Text="?" FontSize="36" Grid.Row="2" Grid.Column="3" Clicked="Button_Clicked"/>
-                <Button Text="?" FontSize="36" Grid.Row="3" Clicked="Button_Clicked"/>
-                <Button Text="?" FontSize="36" Grid.Row="3" Grid.Column="1" Clicked="Button_Clicked"/>
-                <Button Text="?" FontSize="36" Grid.Row="3" Grid.Column="2" Clicked="Button_Clicked"/>
-                <Button Text="?" FontSize="36" Grid.Row="3" Grid.Column="3" Clicked="Button_Clicked"/>
-
+                <Button Text="?" FontSize="36" Grid.Row="1" Grid.Column="4" Clicked="Button_Clicked"/>
+                <Button Text="?" FontSize="36" Grid.Row="1" Grid.Column="5" Clicked="Button_Clicked"/>
             </Grid>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

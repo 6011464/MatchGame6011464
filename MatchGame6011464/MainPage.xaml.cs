@@ -2,68 +2,112 @@
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-     
+        int matchesFound = 0;
+        Button lastButtonClicked;
+        bool findingMatch = false;
+        DateTime startTime;
+        bool gameEnded = false;
 
         public MainPage()
         {
             InitializeComponent();
-            SetUpGame();
+            SetUpGame(); // Configurar el juego al inicializar la página
+            startTime = DateTime.Now;
+
+            // Iniciar temporizador para mostrar el tiempo transcurrido
+            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            {
+                if (!gameEnded)
+                {
+                    var elapsedTime = DateTime.Now - startTime;
+                    lblTimer.Text = $"Time: {elapsedTime:mm\\:ss}";
+                    return true; // Continuar el temporizador
+                }
+                return false; // Detener el temporizador cuando el juego termine
+            });
         }
 
-
-
-        // Método para configurar el juego
+        // Método para configurar las formas aleatorias en los botones
         private void SetUpGame()
         {
-            // Lista de emojis de animales
-            List<string> animalEmoji = new List<string>()
-            {
-                "🤔", "🤔",
-                "⨊", "⨊",
-                "🌹", "🌹",
-                "🎁", "🎁",
-                "⩙", "⩙",
-                "✌", "✌",
-                "👌", "👌",
-                "⨞", "⨞",
-            };
+            // Lista de formas disponibles
+            List<string> shapes = new List<string>()
+    {
+        "🔷", "✨", "❤", "🎶", "🤳", "▲", "🎁", "□",
+        "🔷", "✨", "❤", "🎶", "🤳", "▲", "🎁", "□",
+    };
 
-            Random random = new Random(); // Generador aleatorio
-            foreach (Button view in Grid1.Children) // Iteractuar a través de los botones en el grid
+            Random random = new Random();
+            // Asignar formas aleatorias a los botones en el Grid
+            foreach (var child in Grid1.Children)
             {
-                int index = random.Next(animalEmoji.Count); // Obtener un índice
-                string nextEmoji = animalEmoji[index]; // próximo emoji
-
-                view.Text = nextEmoji; // Establecer el texto del botón
-                animalEmoji.RemoveAt(index); // Eliminar el emoji usado de la lista
+                if (child is Button button)
+                {
+                    int index = random.Next(shapes.Count);
+                    string nextShape = shapes[index];
+                    button.Text = nextShape;
+                    shapes.RemoveAt(index);
+                    button.IsVisible = true; // Asegurar que los botones sean visibles
+                }
             }
         }
 
-        Button ultimoButtonCliked; // Último botón clicado
-        bool encontrandoMatch = false; //  seguir el estado del juego
-
-        // Evento para manejar el clic en los botones
-        private void Button_Clicked(object sender, EventArgs e)
+        // Evento de clic en un botón
+        private async void Button_Clicked(object sender, EventArgs e)
         {
-            Button button = sender as Button; // Obtener el botón que ha sido selccionado
+            // Verificar si el juego ha terminado y reiniciar si es necesario
+            if (gameEnded)
+            {
+                SetUpGame(); // Reiniciar el juego
+                startTime = DateTime.Now;
+                lblPrincipal.Text = "Match Game Indel 6011464";
+                matchesFound = 0;
+                gameEnded = false;
+            }
 
-            if (encontrandoMatch == false) // Si no tiene coincidencia
+            // Verificar si ya se está buscando una coincidencia y el juego no ha terminado
+            if (!findingMatch && !gameEnded)
             {
-                button.IsVisible = false; // Ocultar el botón selccionado
-                ultimoButtonCliked = button; // Establecer el botón selccioando como el último
-                encontrandoMatch = true; // Indicar que se está buscando
+                if (sender is Button button)
+                {
+                    button.IsVisible = false; // Ocultar el botón seleccionado
+                    lastButtonClicked = button; // Guardar el último botón seleccionado
+                    findingMatch = true; // Indicar que se está buscando una coincidencia
+                }
             }
-            else if (button.Text == ultimoButtonCliked.Text) // Si se encuentra una coincidencia
+            else if (!gameEnded)
             {
-                button.IsVisible = false; // Ocultar el botón seleccionado
-                encontrandoMatch = false; // Restablecer el estado del juego
+                if (sender is Button button)
+                {
+                    if (button.Text == lastButtonClicked.Text) // Si hay una coincidencia
+                    {
+                        button.IsVisible = false; // Ocultar el botón seleccionado
+                        matchesFound++; // Incrementar el número de coincidencias encontradas
+                        if (matchesFound == 8) // Si se encuentran todas las coincidencias
+                        {
+                            var elapsedTime = DateTime.Now - startTime;
+                            await DisplayAlert("Congratulations!", $"You've won in {elapsedTime:mm\\:ss}!", "OK");
+                            gameEnded = true; // Indicar que el juego ha terminado
+                        }
+                    }
+                    else // Si no hay coincidencia
+                    {
+                        await System.Threading.Tasks.Task.Delay(1000); // Esperar un segundo
+                        lastButtonClicked.IsVisible = true; // Mostrar el último botón seleccionado
+                    }
+                    findingMatch = false; // Restablecer el estado de búsqueda
+                }
             }
-            else // Si no  encuentra una coincidencia
-            {
-                ultimoButtonCliked.IsVisible = true; // Mostrar el último botón seleccionado
-                encontrandoMatch = false; // Restablecer el estado del juego
-            }
+        }
+
+        // Método para reiniciar el juego cuando se presiona el botón de reinicio
+        private void RestartButton_Clicked(object sender, EventArgs e)
+        {
+            gameEnded = false; // Reiniciar el estado del juego
+            matchesFound = 0; // Reiniciar el contador de coincidencias
+            SetUpGame(); // Reiniciar el juego
+            startTime = DateTime.Now; // Reiniciar el tiempo transcurrido
+            lblPrincipal.Text = "Match Game Indel 6011464"; // Restablecer el título
         }
     }
 }
